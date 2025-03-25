@@ -1,49 +1,21 @@
-import React, { use, useState } from "react";
+import React, { useState, useContext } from "react";
 import "../styles/LoginPage.css";
 import loginImage from "../assets/login-image.jpg";
-import { useAuth } from "../context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
 
 export default function LoginPage() {
+    const authContext = useContext(AuthContext);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const { setToken } = useAuth();
+    
+    if (!authContext) return null; 
 
-    const handleLoginButton = async () => {
-        try {
-            const req = JSON.stringify({
-                username: username,
-                password: password
-            })
-            const response = await fetch("http://localhost:8080/api/v1/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-        
-                body: req
-            });
+    const { login } = authContext;
 
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status} ${response.statusText}`);
-            }
-
-            const contentType = response.headers.get("content-type");
-            let data;
-            if (contentType && contentType.includes("application/json")) {
-                data = await response.json();
-            } else {
-                data = await response.text();
-            }
-            console.log("Login successful:", data);
-            // Manejar la respuesta aquí si es necesario
-            setToken(data.token);
-            window.location.href = "/home";
-        } catch (error) {
-            const errorr = (error as any)
-            console.error("Error al iniciar sesión:", error);
-            alert(`Error al iniciar sesión: ${errorr.message}`);
-        }
-    };
+    async function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
+        await login(username, password);
+  }
 
     return (
         <div className="login-container">
@@ -53,19 +25,11 @@ export default function LoginPage() {
             <div className="right-side">
                 <div className="login-form">
                     <h2>Iniciar sesión</h2>
-                    <input 
-                        type="text" 
-                        placeholder="Usuario" 
-                        value={username} 
-                        onChange={(e) => setUsername(e.target.value)} 
-                    />
-                    <input 
-                        type="password" 
-                        placeholder="Contraseña" 
-                        value={password} 
-                        onChange={(e) => setPassword(e.target.value)} 
-                    />
-                    <button onClick={handleLoginButton}>Entrar</button>
+                    <form onSubmit={handleSubmit}>
+                    <input type="username" placeholder="Usuario" value={username} onChange={(e) => setUsername(e.target.value)} required/>
+                    <input type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                    <button>Entrar</button>
+                    </form>
                 </div>
             </div>
         </div>

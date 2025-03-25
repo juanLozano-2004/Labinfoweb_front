@@ -1,30 +1,35 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useEffect } from "react";
+import { login as loginService } from "../services/authService";
 
 interface AuthContextType {
-    token: string | null;
-    setToken: (token: string | null) => void;
+  token: string | null;
+  login: (username: string, password: string) => Promise<void>;
+  logout: () => void;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-interface AuthProviderProps {
-    children: React.ReactNode;
-}
+export default function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-    const [token, setToken] = useState<string | null>(null);
-
-    return (
-        <AuthContext.Provider value={{ token, setToken }}>
-            {children}
-        </AuthContext.Provider>
-    );
-};
-
-export const useAuth = (): AuthContextType => {
-    const context = useContext(AuthContext);
-    if (context === undefined) {
-        throw new Error('useAuth must be used within an AuthProvider');
+  async function login(username: string, password: string) {
+    try {
+      const data = await loginService(username, password);
+      setToken(data.token);
+      localStorage.setItem("token", data.token);
+    } catch (error) {
+      console.error("Error en login:", error);
     }
-    return context;
-};
+  }
+
+  function logout() {
+    setToken(null);
+    localStorage.removeItem("token");
+  }
+
+  return (
+    <AuthContext.Provider value={{ token, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
