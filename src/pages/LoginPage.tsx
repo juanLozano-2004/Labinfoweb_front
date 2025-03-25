@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import {useNavigate} from "react-router-dom";
 import "../styles/LoginPage.css";
 import loginImage from "../assets/login-image.jpg";
 import { AuthContext } from "../context/AuthContext";
@@ -7,15 +8,21 @@ export default function LoginPage() {
     const authContext = useContext(AuthContext);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    
+    const navigate = useNavigate();
+
     if (!authContext) return null; 
 
     const { login } = authContext;
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        await login(username, password);
-  }
+        try {
+            await login(username, password);
+            navigate("/home");
+          } catch (error) {
+            console.error("Error en login:", error);
+          }
+    }
 
     return (
         <div className="login-container">

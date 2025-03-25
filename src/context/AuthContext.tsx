@@ -14,9 +14,10 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
   async function login(username: string, password: string) {
     try {
-      const data = await loginService(username, password);
-      setToken(data.token);
-      localStorage.setItem("token", data.token);
+      const token = await loginService(username, password);
+      console.log("Token:", token); // Mostrar el token en la consola
+      setToken(token);
+      localStorage.setItem("token", token);
     } catch (error) {
       console.error("Error en login:", error);
     }

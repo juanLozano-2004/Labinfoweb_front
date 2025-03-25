@@ -1,0 +1,81 @@
+.home-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #e0f7e9; /* Verde pastel */
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.home-title {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #2e7d32; /* Verde oscuro */
+}
+
+.loading-text {
+  font-size: 18px;
+  color: #555;
+}
+
+.options-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 200px; /* Ajustar el ancho */
+  width: 100%;
+  height: 75vh; /* Ajustar la altura para cubrir el 75% de la pantalla */
+  border-radius: 20%; /* Eliminar el borde redondeado */
+}
+
+.card {
+  width: 100%;
+  padding: 16px;
+  background: rgb(163, 225, 174);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 0; /* Eliminar el borde redondeado para que se vean unidas */
+  cursor: pointer;
+  transition: background 0.3s ease;
+  border-top: 1px solid #ddd; /* Agregar borde superior para separar visualmente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card:first-child {
+  border-top: none; /* Eliminar el borde superior de la primera tarjeta */
+}
+
+.card:hover {
+  background-color: #e0f2fe;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Estilos para las figuras circulares */
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(46, 125, 50, 0.1); /* Verde oscuro con transparencia */
+}
+
+.circle-1 {
+  width: 300px;
+  height: 300px;
+  top: -50px;
+  left: -50px;
+}
+
+.circle-2 {
+  width: 200px;
+  height: 200px;
+  bottom: -50px;
+  right: -50px;
+}
