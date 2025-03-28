@@ -1,14 +1,15 @@
-import React, { Component, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import {jwtDecode} from "jwt-decode"; // Importa jwtDecode correctamente
-import Card from "../components/Card";// Importa el componente Card
+import {jwtDecode} from "jwt-decode";
 import "../styles/HomePage.css";
+import {SideMenuBarAdmin,SideMenuBarUser} from "../components/SideMenuBar";
+import "../styles/SideMenuBar.css";
 
 interface DecodedToken {
   Role: string;
+  exp: number;
 }
-
 
 export default function HomePage() {
   const authContext = useContext(AuthContext);
@@ -21,10 +22,19 @@ export default function HomePage() {
     } else {
       try {
         const decoded: DecodedToken = jwtDecode(authContext.token);
+
+        // Verifica si el token ha expirado
+        const currentTime = Math.floor(Date.now() / 1000); // Tiempo actual en segundos
+        if (decoded.exp < currentTime) {
+          console.error("El token ha expirado");
+          navigate("/"); // Redirige si el token ha expirado
+          return;
+        }
+
         setRole(decoded.Role);
       } catch (error) {
         console.error("Error al decodificar el token:", error);
-        navigate("/");
+        navigate("/"); // Redirige si hay un error al decodificar el token
       }
     }
   }, [authContext, navigate]);
@@ -32,24 +42,51 @@ export default function HomePage() {
   if (!role) return <p>Cargando...</p>;
 
   return (
-    <div>
-      <h1>Bienvenido a Home</h1>
-      {role === "ADMIN" ? <AdminView navigate={navigate} /> : <UserView />}
+    <div className="home-container">
+      <h1 className="home-title">Reservas Labinfo</h1>
+      {role === "ADMIN" ? <AdminView /> : <UserView />}
     </div>
   );
 }
 
-function AdminView({navigate}: {navigate: any}) {
+function AdminView() {
+  const [isMenuVisible, setIsMenuVisible] = React.useState(true);
+
+  const toggleMenu = () => {
+    setIsMenuVisible(!isMenuVisible);
+  };
+
   return (
-    <div className="options-grid">
-    <Card title="Usuarios" onClick={() => navigate("/usuarios")} />
-      <Card title="Laboratorios" onClick={() => navigate("/laboratorios")} />
-      <Card title="Reservas" onClick={() => navigate("/reservas")} />
-      <Card title="Reportes" onClick={() => navigate("/reportes")} />
+    <div className="viewer">
+      <button className="toggle-button" onClick={toggleMenu}>
+        <span className="menu-icon">☰</span>
+      </button>
+      <SideMenuBarAdmin isVisible={isMenuVisible} toggleMenu={toggleMenu} />
+      <div className="content-area">
+        <h1>Vista de Administrador</h1>
+        <p>Aquí puedes gestionar usuarios, laboratorios, reservas, etc.</p>
+      </div>
     </div>
-    );
+  );
 }
 
 function UserView() {
-  return <h2>Vista de Usuario</h2>;
+  const [isMenuVisible, setIsMenuVisible] = React.useState(true);
+
+  const toggleMenu = () => {
+    setIsMenuVisible(!isMenuVisible);
+  };
+
+  return (
+    <div className="viewer">
+      <button className="toggle-button" onClick={toggleMenu}>
+        <span className="menu-icon">☰</span>
+      </button>
+      <SideMenuBarUser isVisible={isMenuVisible} toggleMenu={toggleMenu} />
+      <div className="content-area">
+        <h1>Vista de Usuario</h1>
+        <p>Aquí puedes gestionar usuarios, laboratorios, reservas, etc.</p>
+      </div>
+    </div>
+  );
 }
