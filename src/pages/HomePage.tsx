@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Route,Routes } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import {jwtDecode} from "jwt-decode";
 import "../styles/HomePage.css";
 import {SideMenuBarAdmin,SideMenuBarUser} from "../components/SideMenuBar";
 import "../styles/SideMenuBar.css";
+import UsersPage from "./UsersPage";
 
 interface DecodedToken {
   Role: string;
@@ -51,9 +52,15 @@ export default function HomePage() {
 
 function AdminView() {
   const [isMenuVisible, setIsMenuVisible] = React.useState(true);
+  const navigate = useNavigate();
+
 
   const toggleMenu = () => {
     setIsMenuVisible(!isMenuVisible);
+  };
+
+  const changeView = (path: string) => {
+    navigate(path);
   };
 
   return (
@@ -61,10 +68,14 @@ function AdminView() {
       <button className="toggle-button" onClick={toggleMenu}>
         <span className="menu-icon">☰</span>
       </button>
-      <SideMenuBarAdmin isVisible={isMenuVisible} toggleMenu={toggleMenu} />
+      <SideMenuBarAdmin isVisible={isMenuVisible} toggleMenu={toggleMenu} changeView={changeView} />
       <div className="content-area">
-        <h1>Vista de Administrador</h1>
-        <p>Aquí puedes gestionar usuarios, laboratorios, reservas, etc.</p>
+      <Routes>
+          <Route path="/" element={<h1>Hola, bienvenido al inicio</h1>} />
+          <Route path="usuarios" element={<UsersPage/> } />
+          <Route path="reservas" element={<h1>Lista de Reservas</h1>} />
+          <Route path="laboratorios" element={<h1>Lista de Laboratorios</h1>} />
+      </Routes>
       </div>
     </div>
   );
@@ -72,9 +83,15 @@ function AdminView() {
 
 function UserView() {
   const [isMenuVisible, setIsMenuVisible] = React.useState(true);
+  const navigate = useNavigate();
+
 
   const toggleMenu = () => {
     setIsMenuVisible(!isMenuVisible);
+  };
+
+  const changeView = (path: string) => {
+    navigate(path); 
   };
 
   return (
@@ -82,10 +99,12 @@ function UserView() {
       <button className="toggle-button" onClick={toggleMenu}>
         <span className="menu-icon">☰</span>
       </button>
-      <SideMenuBarUser isVisible={isMenuVisible} toggleMenu={toggleMenu} />
+      <SideMenuBarUser isVisible={isMenuVisible} toggleMenu={toggleMenu} changeView={changeView}/>
       <div className="content-area">
-        <h1>Vista de Usuario</h1>
-        <p>Aquí puedes gestionar usuarios, laboratorios, reservas, etc.</p>
+        <Routes>
+          <Route path="/" element={<h1>Hola, bienvenido al inicio</h1>} />
+          <Route path="reservas" element={<h1>Lista de Reservas</h1>} />
+        </Routes>
       </div>
     </div>
   );
