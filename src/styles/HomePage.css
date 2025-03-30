@@ -36,8 +36,10 @@
   flex: 1; /* Ocupa el resto del espacio disponible */
   display: flex; /* Activa flexbox */
   flex-direction: column; /* Asegura que los elementos internos se apilen verticalmente */
+  justify-content: flex-start; /* Alinea el contenido al inicio */  
   align-items: center; /* Centra horizontalmente */
-  justify-content: center; /* Centra verticalmente */
+  padding: 20px; /* Espaciado interno */
+  box-sizing: border-box; /* Incluye el padding en el ancho total */
   transition: margin-left 0.3s ease; /* Animación para ajustar el contenido */
   text-align: center; /* Centra el texto dentro del contenido */
 }

@@ -19,6 +19,7 @@ export default function App() {
                 <HomePage />
             }
           />
+          <Route path="*" element={<LoginPage />} />
         </Routes>
       </Router>
     </AuthProvider>

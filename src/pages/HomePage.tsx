@@ -6,6 +6,7 @@ import "../styles/HomePage.css";
 import {SideMenuBarAdmin,SideMenuBarUser} from "../components/SideMenuBar";
 import "../styles/SideMenuBar.css";
 import UsersPage from "./UsersPage";
+import "../styles/UsersPage.css";
 
 interface DecodedToken {
   Role: string;
