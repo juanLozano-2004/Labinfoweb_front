@@ -1,4 +1,4 @@
-.user-list {
+.laboratory-list {
   display: flex;
   flex-direction: column;
   align-items: center; /* Centra horizontalmente el contenido */
@@ -10,7 +10,7 @@
   transition: width 0.3s ease; /* Transición suave al ajustar el ancho */
 }
 
-.user-row {
+.laboratory-row {
   display: flex;
   justify-content: space-between; /* Espacia el contenido entre info y botones */
   align-items: center; /* Centra verticalmente el contenido */
@@ -23,16 +23,17 @@
   box-sizing: border-box; /* Asegura que el padding no desborde */
   transition: width 0.3s ease; /* Transición suave al ajustar el ancho */
 }
+
 /* Alterna los colores de fondo entre blanco y verde pastel */
-.user-row:nth-child(odd) {
-  background-color: #92d8a2;  /* Blanco suave (hueso) */
+.laboratory-row:nth-child(odd) {
+  background-color: #92d8a2; /* Blanco suave (hueso) */
 }
 
-.user-row:nth-child(even) {
-  background-color:darkgray; /* Verde pastel */
+.laboratory-row:nth-child(even) {
+  background-color: darkgray; /* Verde pastel */
 }
 
-.user-row .info {
+.laboratory-row .info {
   display: flex;
   gap: 0; /* Elimina el espaciado entre los elementos para usar separadores */
   flex-wrap: nowrap; /* Evita que los elementos se ajusten a la siguiente línea */
@@ -41,7 +42,7 @@
 }
 
 /* Estilo para cada celda de información */
-.user-row .info p {
+.laboratory-row .info p {
   margin: 0;
   padding: 0 15px; /* Espaciado interno horizontal */
   font-size: 16px;
@@ -51,7 +52,7 @@
 }
 
 /* Añade un separador vertical "|" después de cada celda excepto la última */
-.user-row .info p:not(:last-child)::after {
+.laboratory-row .info p:not(:last-child)::after {
   content: "|";
   position: absolute;
   right: 0;
@@ -60,13 +61,13 @@
   color: #999; /* Color del separador */
 }
 
-.user-row .actions {
+.laboratory-row .actions {
   display: flex;
   gap: 10px; /* Espaciado entre los botones */
   margin-left: 20px; /* Espacio entre la información y los botones */
 }
 
-.user-row button {
+.laboratory-row button {
   padding: 8px 12px;
   border: none;
   border-radius: 5px;
@@ -75,15 +76,15 @@
   color: white;
 }
 
-.user-row .edit-button {
+.laboratory-row .edit-button {
   background-color: #007bff; /* Azul para editar */
 }
 
-.user-row .delete-button {
+.laboratory-row .delete-button {
   background-color: #dc3545; /* Rojo para borrar */
 }
 
-.user-row button:hover {
+.laboratory-row button:hover {
   opacity: 0.9; /* Efecto hover */
 }
 
@@ -95,7 +96,7 @@
 }
 
 /* Ajuste dinámico cuando la barra de menú está oculta */
-.admin-view .side-menu-bar.hidden + .content-area .user-list {
+.admin-view .side-menu-bar.hidden + .content-area .laboratory-list {
   width: 100%; /* Ocupa todo el ancho disponible */
   transition: width 0.3s ease; /* Transición suave */
 }

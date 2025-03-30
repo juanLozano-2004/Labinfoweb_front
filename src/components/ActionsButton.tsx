@@ -2,11 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import "../styles/ActionButton.css";
 
 interface ActionsButtonProps {
-  onAddUser?: () => void;
-  onExportExcel?: () => void;
+  onAdd?: () => void; // Acción para añadir (usuario o laboratorio)
+  onExportExcel?: () => void; // Acción para exportar a Excel
+  addLabel: string; // Etiqueta personalizada para el botón "Añadir"
 }
 
-export default function ActionsButton({ onAddUser, onExportExcel }: ActionsButtonProps) {
+export default function ActionsButton({ onAdd, onExportExcel, addLabel }: ActionsButtonProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -38,11 +39,11 @@ export default function ActionsButton({ onAddUser, onExportExcel }: ActionsButto
           <button 
             className="dropdown-item"
             onClick={() => {
-              if (onAddUser) onAddUser();
+              if (onAdd) onAdd();
               setIsMenuOpen(false);
             }}
           >
-            ➕ Añadir usuario
+            ➕ {addLabel}
           </button>
           <button 
             className="dropdown-item"

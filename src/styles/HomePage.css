@@ -32,6 +32,7 @@
   width: 100%;;
 
 }
+
 .content-area {
   flex: 1; /* Ocupa el resto del espacio disponible */
   display: flex; /* Activa flexbox */
@@ -39,6 +40,8 @@
   justify-content: flex-start; /* Alinea el contenido al inicio */  
   align-items: center; /* Centra horizontalmente */
   padding: 20px; /* Espaciado interno */
+  padding-left: 0;
+  padding-right: 275px;
   box-sizing: border-box; /* Incluye el padding en el ancho total */
   transition: margin-left 0.3s ease; /* Animación para ajustar el contenido */
   text-align: center; /* Centra el texto dentro del contenido */

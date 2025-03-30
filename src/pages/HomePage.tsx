@@ -7,6 +7,7 @@ import {SideMenuBarAdmin,SideMenuBarUser} from "../components/SideMenuBar";
 import "../styles/SideMenuBar.css";
 import UsersPage from "./UsersPage";
 import "../styles/UsersPage.css";
+import LaboratoriesPage from "./LaboratoriesPage";
 
 interface DecodedToken {
   Role: string;
@@ -75,7 +76,7 @@ function AdminView() {
           <Route path="/" element={<h1>Hola, bienvenido al inicio</h1>} />
           <Route path="usuarios" element={<UsersPage/> } />
           <Route path="reservas" element={<h1>Lista de Reservas</h1>} />
-          <Route path="laboratorios" element={<h1>Lista de Laboratorios</h1>} />
+          <Route path="laboratorios" element={<LaboratoriesPage/>} />
       </Routes>
       </div>
     </div>

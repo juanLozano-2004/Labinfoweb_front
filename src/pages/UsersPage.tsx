@@ -4,8 +4,8 @@ import axios from "axios";
 import "../styles/UsersPage.css";
 import { API_BASE_URL } from "../services/globals";
 import ActionsButton from "../components/ActionsButton";
-import UserEditModal from "../components/UserEditModal";
-import UserCreateModal from "../components/UserCreateModal";
+import UserEditModal from "../components/User/UserEditModal";
+import UserCreateModal from "../components/User/UserCreateModal";
 
 interface User {
   id?: string;
@@ -116,8 +116,9 @@ export default function UsersPage() {
       <div className="user-list-header">
         <h1>Lista de Usuarios</h1>
         <ActionsButton 
-          onAddUser={handleAddUser}
+          onAdd={handleAddUser}
           onExportExcel={() => console.log("Exportar como Excel")}
+          addLabel="Añadir Usuario"
         />
       </div>
 

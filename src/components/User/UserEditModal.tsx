@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/UserModal.css";
+import "../../styles/UserModal.css";
 
 interface User {
   id: string;
