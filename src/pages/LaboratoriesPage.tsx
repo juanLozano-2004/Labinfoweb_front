@@ -76,35 +76,33 @@ export default function LaboratoriesPage() {
     setModalState({ type: "create", laboratory: null }); // Abre el modal de creación
   };
 
-  const handleSave = async (laboratory: Laboratory) => {
-    try {
-      if (modalState.type === "edit" && laboratory.idLabortatory) {
-        // Editar laboratorio existente
-        const response = await axios.post(`${API_BASE_URL}/api/v1/laboratory/update`, laboratory, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authContext?.token}`,
-          },
-        });
-        setLaboratories((prevLabs) =>
-          prevLabs.map((lab) => (lab.idLabortatory === laboratory.idLabortatory ? response.data : lab))
-        );
-      } else if (modalState.type === "create") {
-        // Crear nuevo laboratorio
-        const response = await axios.post(`${API_BASE_URL}/api/v1/laboratory/create`, laboratory, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authContext?.token}`,
-          },
-        });
-        setLaboratories((prevLabs) => [...prevLabs, response.data]);
-      }
-      setModalState({ type: null, laboratory: null }); // Cierra el modal
-    } catch (error) {
-      console.error("Error al guardar el laboratorio:", error);
-      setError("No se pudo guardar el laboratorio. Verifica los datos.");
+const handleSave = async (laboratory: Laboratory) => {
+  try {
+    if (modalState.type === "edit" && laboratory.idLabortatory) {
+      const response = await axios.post(`${API_BASE_URL}/api/v1/laboratory/update`, laboratory, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authContext?.token}`,
+        },
+      });
+      setLaboratories((prevLabs) =>
+        prevLabs.map((lab) => (lab.idLabortatory === laboratory.idLabortatory ? response.data : lab))
+      );
+    } else if (modalState.type === "create") {
+      const response = await axios.post(`${API_BASE_URL}/api/v1/laboratory/create`, laboratory, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authContext?.token}`,
+        },
+      });
+      setLaboratories((prevLabs) => [...prevLabs, response.data]);
     }
-  };
+    setModalState({ type: null, laboratory: null });
+  } catch (error) {
+    console.error("Error al guardar el laboratorio:", error);
+    setError("No se pudo guardar el laboratorio. Verifica los datos.");
+  }
+};
 
   return (
     <div>

@@ -1,0 +1,35 @@
+.calendar {
+  margin-top: 20px;
+}
+
+.calendar table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.calendar th,
+.calendar td {
+  border: 1px solid #ccc;
+  text-align: center;
+  padding: 10px;
+}
+
+.calendar th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.calendar-cell {
+  cursor: pointer;
+  background-color: #fff;
+}
+
+.calendar-cell:hover {
+  background-color: #f0f0f0;
+}
+
+.calendar-cell.reserved {
+  background-color: #d4edda;
+  color: #155724;
+  font-weight: bold;
+}

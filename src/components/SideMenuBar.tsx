@@ -1,6 +1,7 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/SideMenuBar.css";
+import { AuthContext } from "../context/AuthContext";
+import React, { useContext } from "react";
 
 interface SideMenuBarProps {
   isVisible: boolean;
@@ -10,10 +11,13 @@ interface SideMenuBarProps {
 
 export function SideMenuBarAdmin({ isVisible, toggleMenu ,changeView }: SideMenuBarProps) {
   const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
+
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken"); 
-    navigate("/"); 
+    if (authContext) {
+      authContext.logout(); // Llama al método `logout` del contexto
+    }
   };
   return (
     <div className={`side-menu-bar ${isVisible ? "visible" : "hidden"}`}>

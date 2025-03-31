@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../styles/UserModal.css";
+import "../../styles/LaboratoryModal.css";
 
 interface Laboratory {
   name: string;
@@ -26,7 +26,8 @@ export default function LaboratoryCreateModal({ onClose, onSave }: CreateLaborat
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(formData);
+    onSave(formData); // Envía los datos al método onSave
+    onClose(); // Cierra el modal después de guardar
   };
 
   return (

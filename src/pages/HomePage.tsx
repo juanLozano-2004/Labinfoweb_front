@@ -8,6 +8,7 @@ import "../styles/SideMenuBar.css";
 import UsersPage from "./UsersPage";
 import "../styles/UsersPage.css";
 import LaboratoriesPage from "./LaboratoriesPage";
+import ReservationPage from "./ReservationPage";
 
 interface DecodedToken {
   Role: string;
@@ -75,7 +76,7 @@ function AdminView() {
       <Routes>
           <Route path="/" element={<h1>Hola, bienvenido al inicio</h1>} />
           <Route path="usuarios" element={<UsersPage/> } />
-          <Route path="reservas" element={<h1>Lista de Reservas</h1>} />
+          <Route path="reservas" element={<ReservationPage/>} />
           <Route path="laboratorios" element={<LaboratoriesPage/>} />
       </Routes>
       </div>
@@ -105,7 +106,7 @@ function UserView() {
       <div className="content-area">
         <Routes>
           <Route path="/" element={<h1>Hola, bienvenido al inicio</h1>} />
-          <Route path="reservas" element={<h1>Lista de Reservas</h1>} />
+          <Route path="reservas" element={<ReservationPage/>} />
         </Routes>
       </div>
     </div>
