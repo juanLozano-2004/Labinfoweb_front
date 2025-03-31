@@ -26,11 +26,11 @@
 
 /* Alterna los colores de fondo entre blanco y verde pastel */
 .laboratory-row:nth-child(odd) {
-  background-color: #92d8a2; /* Blanco suave (hueso) */
+  background-color: white; /* Blanco suave (hueso) */
 }
 
 .laboratory-row:nth-child(even) {
-  background-color: darkgray; /* Verde pastel */
+  background-color: white; /* Verde pastel */
 }
 
 .laboratory-row .info {

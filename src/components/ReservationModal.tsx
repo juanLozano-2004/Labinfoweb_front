@@ -10,12 +10,16 @@ interface ReservationModalProps {
     endTime: string;
     user: string;
     className: string;
+    professorName: string;
   }) => void;
   laboratories: { idLabortatory: string; name: string }[];
   selectedDay: string;
   startTime: string;
   endTime: string;
   currentUser: string; // Usuario autenticado
+  selectedLaboratory: string; // Laboratorio seleccionado
+  onLaboratoryChange?: (laboratoryId: string) => void; // Función opcional para manejar cambios en el laboratorio
+  token: string; // Token de autenticación
 }
 
 export default function ReservationModal({
@@ -27,23 +31,34 @@ export default function ReservationModal({
   startTime,
   endTime,
   currentUser,
+  selectedLaboratory,
+  onLaboratoryChange, // Recibe la función para actualizar el laboratorio
+  token, // Token de autenticación
 }: ReservationModalProps) {
   const [formData, setFormData] = useState({
-    laboratoryId: "",
-    user: currentUser, // Prellenar con el usuario autenticado
+    laboratoryId: selectedLaboratory, // Prellenar con el laboratorio seleccionado
+    user: currentUser,
     className: "",
-    professorName: "", // Nuevo campo para el nombre del profesor
+    professorName: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+
+    // Si se cambia el laboratorio, actualiza el estado en el componente principal
+    if (name === "laboratoryId" && onLaboratoryChange) {
+      onLaboratoryChange(value);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Token enviado en la solicitud POST:", token); // Verifica el token
+    console.log("Datos enviados:", formData); // Verifica los datos enviados
     onSave({
       ...formData,
       startTime: `${selectedDay} ${startTime}`,

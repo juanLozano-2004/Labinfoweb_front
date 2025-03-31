@@ -25,11 +25,11 @@
 }
 /* Alterna los colores de fondo entre blanco y verde pastel */
 .user-row:nth-child(odd) {
-  background-color: #92d8a2;  /* Blanco suave (hueso) */
+  background-color: white;  /* Blanco suave (hueso) */
 }
 
 .user-row:nth-child(even) {
-  background-color:darkgray; /* Verde pastel */
+  background-color:white; /* Verde pastel */
 }
 
 .user-row .info {

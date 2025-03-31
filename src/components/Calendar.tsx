@@ -1,9 +1,16 @@
 import React from "react";
 import "../styles/Calendar.css";
-import ReservationModal from "../components/ReservationModal";
+
+interface Reservation {
+  id?: string;
+  date: string; // Fecha en formato YYYY-MM-DD
+  time: string; // Hora en formato HH:mm
+  className: string;
+  professorName: string;
+}
 
 interface CalendarProps {
-  reservations: any[];
+  reservations: Reservation[];
   onCellClick: (day: string, time: string) => void;
 }
 
@@ -36,9 +43,11 @@ export default function Calendar({ reservations, onCellClick }: CalendarProps) {
             <tr key={interval}>
               <td>{interval}</td>
               {days.map((day) => {
+                // Buscar la reserva correspondiente al día y hora
                 const reservation = reservations.find(
                   (res) => res.date === day && res.time === interval
                 );
+
                 return (
                   <td
                     key={`${day}-${interval}`}
@@ -46,14 +55,12 @@ export default function Calendar({ reservations, onCellClick }: CalendarProps) {
                     onClick={() => onCellClick(day, interval)}
                   >
                     {reservation ? (
-                      <>
+                      <div className="reservation">
                         <strong>{reservation.className}</strong>
                         <br />
                         <span>{reservation.professorName}</span>
-                      </>
-                    ) : (
-                      ""
-                    )}
+                      </div>
+                    ) : null}
                   </td>
                 );
               })}
