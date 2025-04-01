@@ -9,6 +9,13 @@ import { differenceInWeeks, addDays, format } from "date-fns"; // Importa funcio
 import ReservationEditModal from "../components/ReservationEditModal"; // Asegúrate de que esta ruta sea correcta
 
 
+interface User {
+  id: string;
+  username: string;
+  email: string;
+  fullName: string;
+}
+
 interface Laboratory {
   idLabortatory: string;
   name: string;
@@ -20,6 +27,8 @@ interface Reservation {
   laboratoryId?: string;
   date: string; // Fecha en formato YYYY-MM-DD
   time: string; // Hora en formato HH:mm
+  startTime?: string; // Hora de inicio en formato ISO-8601
+  endTime?: string; // Hora de fin en formato ISO-8601
   user?: string;
   className: string;
   professorName: string;
@@ -29,6 +38,7 @@ export default function ReservationPage() {
   const authContext = useContext(AuthContext); // Obtén el contexto de autenticación
   const token = authContext?.token;
   const currentUser = authContext?.user;
+  const [user, setUser] = useState<User | null>(null);
   const [laboratories, setLaboratories] = useState<Laboratory[]>([]);
   const [selectedLaboratory, setSelectedLaboratory] = useState<string | null>(null);
   const [currentWeek, setCurrentWeek] = useState<number>(1);
@@ -121,16 +131,20 @@ export default function ReservationPage() {
             }
           );
   
-          console.log("Respuesta del backend:", response.data); // Verificar la respuesta del backend
+          console.log("Respuesta del backend:", response.data); // Log para verificar la respuesta del backend
   
-          // Filtrar las reservas por la semana actual
-          const startOfWeek = addDays(new Date(academicPeriod.startDate), (currentWeek - 1) * 7);
-          const endOfWeek = addDays(startOfWeek, 6);
+          // Verificar si response.data es un arreglo
+          if (!Array.isArray(response.data)) {
+            console.error("Error: response.data no es un arreglo:", response.data);
+            setReservations([]); // Asignar un arreglo vacío si no es un arreglo
+            return;
+          }
   
+          // Transformar las reservas
           const transformedReservations = response.data.map((reservation: any) => {
             const startDate = new Date(reservation.startTime);
             const endDate = new Date(reservation.endTime);
-          
+  
             return {
               id: reservation.id,
               laboratoryName: reservation.laboratory.name,
@@ -143,27 +157,52 @@ export default function ReservationPage() {
             };
           });
   
-          console.log("Fecha de inicio de la semana:", format(startOfWeek, "yyyy-MM-dd"));
-          console.log("Fecha de fin de la semana:", format(endOfWeek, "yyyy-MM-dd"));
-          
+          console.log("Reservas transformadas:", transformedReservations);
+  
+          // Filtrar las reservas por la semana actual
+          const startOfWeek = addDays(new Date(academicPeriod.startDate), (currentWeek - 1) * 7);
+          const endOfWeek = addDays(startOfWeek, 6);
+  
           const filteredReservations = transformedReservations.filter((reservation: any) => {
-            console.log("Fecha de la reserva:", reservation.date);
+            const reservationDate = reservation.date;
             const startDate = format(startOfWeek, "yyyy-MM-dd");
             const endDate = format(endOfWeek, "yyyy-MM-dd");
-          
-            return reservation.date >= startDate && reservation.date <= endDate;
+  
+            return reservationDate >= startDate && reservationDate <= endDate;
           });
   
-          console.log("Reservas transformadas y filtradas:", filteredReservations); // Verificar las reservas transformadas y filtradas
+          console.log("Reservas transformadas y filtradas:", filteredReservations);
           setReservations(filteredReservations);
         } catch (error) {
           console.error("Error fetching reservations:", error); // Mostrar errores en la consola
+          setReservations([]); // Asignar un arreglo vacío en caso de error
         }
       };
   
       fetchReservations();
     }
   }, [selectedLaboratory, currentWeek, token]);
+
+    useEffect(() => {
+    async function fetchUser() {
+      try {
+        if (currentUser) {
+          const response = await axios.get(`${API_BASE_URL}/api/v1/user/getByUsername/${currentUser}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setUser(response.data); // Guarda el usuario en el estado
+        } else {
+          console.warn("El valor de 'currentUser' es nulo o indefinido."); // Log para casos donde currentUser no está definido
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    }
+  
+    fetchUser();
+  }, [currentUser, token]);
 
   const handleCreateReservation = (day: string, time: string) => {
     const [startTime, endTime] = time.split(" - "); // Divide el rango en hora de inicio y fin
@@ -173,14 +212,52 @@ export default function ReservationPage() {
 
   const handleEditReservation = (reservation: Reservation) => {
     setSelectedReservation(reservation);
+  
+    // Configura la celda seleccionada basada en la reserva
+    const [startTime, endTime] = reservation.time.split(" - "); // Divide el rango de tiempo en inicio y fin
+    setSelectedCell({
+      day: reservation.date, // Usa la fecha de la reserva
+      time: startTime,       // Hora de inicio
+      endTime: endTime,      // Hora de fin
+    });
+  
     setIsEditingReservation(true);
   };
 
   const handleSaveEditedReservation = async (updatedReservation: Reservation) => {
     try {
+      if (!selectedReservation) {
+        console.error("No hay una reserva seleccionada para editar.");
+        return;
+      }
+
+      if(!selectedCell){
+        console.error("No hay una celda seleccionada para editar.");
+        return;
+      }
+      
+      const date = selectedCell.day; // Fecha seleccionada
+      const startTime = `${date}T${convertTo24HourFormat(selectedCell.time)}`; // Hora de inicio en formato ISO-8601
+      const endTime = `${date}T${convertTo24HourFormat(selectedCell.endTime || "00:00")}`; // Hora de fin en formato ISO-8601
+
+      const payload = {
+        id: selectedReservation.id, // Usa el ID de la reserva seleccionada
+        laboratory: {
+          idLabortatory: selectedReservation.laboratoryId,
+          name: laboratories.find((lab) => lab.idLabortatory === selectedReservation.laboratoryId)?.name || "",
+          location: laboratories.find((lab) => lab.idLabortatory === selectedReservation.laboratoryId)?.location || "",
+        },
+        startTime: startTime, // Usa el valor actualizado o el original
+        endTime: endTime, // Usa el valor actualizado o el original
+        user: user, // Objeto completo del usuario
+        className: updatedReservation.className || selectedReservation.className, // Usa el valor actualizado o el original
+        professorName: updatedReservation.professorName || selectedReservation.professorName, // Usa el valor actualizado o el original
+      };
+
+      console.log("Datos enviados al backend para editar la reserva:", payload);
       const response = await axios.post(
         `${API_BASE_URL}/api/v1/reservation/update`,
-        updatedReservation,
+        payload,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -189,6 +266,7 @@ export default function ReservationPage() {
         }
       );
       console.log("Reserva actualizada:", response.data);
+      console.log("Respuesta del backend al editar la reserva:", response.data);
       setReservations((prev) =>
         prev.map((res) => (res.id === updatedReservation.id ? updatedReservation : res))
       );
@@ -200,6 +278,7 @@ export default function ReservationPage() {
 
   const handleDeleteReservation = async (id: string) => {
     try {
+      console.log("Intentando eliminar la reserva con ID:", id);
       await axios.delete(`${API_BASE_URL}/api/v1/reservation/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -215,6 +294,11 @@ export default function ReservationPage() {
 
   const handleSaveReservation = async (reservation: Reservation) => {
     try {
+      console.log(currentUser);
+      if (!user) {
+        console.error("El objeto 'user' no está disponible. No se puede crear la reserva.");
+        return;
+      }
       // Usar directamente la fecha seleccionada
       const date = selectedCell?.day || ""; // Fecha en formato YYYY-MM-DD
   
@@ -230,11 +314,7 @@ export default function ReservationPage() {
         },
         startTime, // Enviar en formato ISO-8601
         endTime,   // Enviar en formato ISO-8601
-        user: {
-          username: currentUser || "defaultUser",
-          email: "default@example.com",
-          fullName: "Default User",
-        },
+        user: user,
         className: reservation.className,
         professorName: reservation.professorName,
       };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "../styles/ReservationEditModal.css";
 
 
@@ -28,9 +28,18 @@ export default function ReservationEditModal({
   onDelete,
 }: ReservationEditModalProps) {
   const [formData, setFormData] = useState({
-    className: reservation.className,
-    professorName: reservation.professorName,
+    className:"",
+    professorName:"",
   });
+
+  useEffect(() => {
+    if (reservation) {
+      setFormData({
+        className: reservation.className,
+        professorName: reservation.professorName,
+      });
+    }
+  }, [reservation]);  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
