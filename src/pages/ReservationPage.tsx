@@ -6,10 +6,12 @@ import { AuthContext } from "../context/AuthContext"; // Importa el contexto de 
 import Calendar from "../components/Calendar"; // Asegúrate de que esta ruta sea correcta
 import ReservationModal from "../components/ReservationModal";
 import { differenceInWeeks, addDays, format } from "date-fns"; // Importa funciones para manejar fechas
+import { es } from "date-fns/locale"; // Importa el locale español
 
 interface Laboratory {
   idLabortatory: string;
   name: string;
+  location: string; // Add the location property
 }
 
 interface Reservation {
@@ -108,23 +110,55 @@ export default function ReservationPage() {
       const fetchReservations = async () => {
         try {
           const response = await axios.get(
-            `${API_BASE_URL}/api/v1/reservation/all?laboratoryId=${selectedLaboratory}&week=${currentWeek}`,
+            `${API_BASE_URL}/api/v1/reservation/getByLaboratory/${selectedLaboratory}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
             }
           );
-          setReservations(response.data);
+  
+          console.log("Respuesta del backend:", response.data); // Verificar la respuesta del backend
+  
+          // Filtrar las reservas por la semana actual
+          const startOfWeek = addDays(new Date(academicPeriod.startDate), (currentWeek - 1) * 7);
+          const endOfWeek = addDays(startOfWeek, 6);
+  
+          const transformedReservations = response.data.map((reservation: any) => {
+            const startDate = new Date(reservation.startTime);
+            const endDate = new Date(reservation.endTime);
+          
+            return {
+              id: reservation.id,
+              laboratoryName: reservation.laboratory.name,
+              date: format(startDate, "yyyy-MM-dd"), // Extraer solo la fecha en formato YYYY-MM-DD
+              time: `${format(startDate, "h:mm a")} - ${format(endDate, "h:mm a")}`, // Formato de hora
+              className: reservation.className,
+              professorName: reservation.professorName,
+            };
+          });
+  
+          console.log("Fecha de inicio de la semana:", format(startOfWeek, "yyyy-MM-dd"));
+          console.log("Fecha de fin de la semana:", format(endOfWeek, "yyyy-MM-dd"));
+          
+          const filteredReservations = transformedReservations.filter((reservation: any) => {
+            console.log("Fecha de la reserva:", reservation.date);
+            const startDate = format(startOfWeek, "yyyy-MM-dd");
+            const endDate = format(endOfWeek, "yyyy-MM-dd");
+          
+            return reservation.date >= startDate && reservation.date <= endDate;
+          });
+  
+          console.log("Reservas transformadas y filtradas:", filteredReservations); // Verificar las reservas transformadas y filtradas
+          setReservations(filteredReservations);
         } catch (error) {
-          console.error("Error fetching reservations:", error);
+          console.error("Error fetching reservations:", error); // Mostrar errores en la consola
         }
       };
-
+  
       fetchReservations();
     }
   }, [selectedLaboratory, currentWeek, token]);
-
   const handleCreateReservation = (day: string, time: string) => {
     const [startTime, endTime] = time.split(" - "); // Divide el rango en hora de inicio y fin
     setSelectedCell({ day, time: startTime, endTime }); // Guarda tanto la hora de inicio como la hora de fin
@@ -145,7 +179,7 @@ export default function ReservationPage() {
         laboratory: {
           idLabortatory: reservation.laboratoryId,
           name: laboratories.find((lab) => lab.idLabortatory === reservation.laboratoryId)?.name || "",
-          location: "Default Location",
+          location: laboratories.find((lab) => lab.idLabortatory === reservation.laboratoryId)?.location || "",
         },
         startTime, // Enviar en formato ISO-8601
         endTime,   // Enviar en formato ISO-8601
@@ -213,19 +247,18 @@ export default function ReservationPage() {
     <div className="reservation-page">
       <h1 className="page-title">Gestión de Reservas</h1>
 
-      {/* Selector de Laboratorio */}
       <div className="laboratory-selector">
         <label>
           Laboratorio:
           <select
             value={selectedLaboratory || ""}
-            onChange={(e) => setSelectedLaboratory(e.target.value)}
+            onChange={(e) => setSelectedLaboratory(e.target.value)} // Ahora selecciona el nombre del laboratorio
           >
             <option value="" disabled>
               Seleccione un laboratorio
             </option>
             {laboratories.map((lab) => (
-              <option key={lab.idLabortatory} value={lab.idLabortatory}>
+              <option key={lab.idLabortatory} value={lab.name}> {/* Usa el nombre como valor */}
                 {lab.name}
               </option>
             ))}
@@ -233,7 +266,7 @@ export default function ReservationPage() {
         </label>
       </div>
 
-      {/* Selector de Semana */}
+      {/* Selector de Semana */}  
       <div className="week-navigation">
         <label>
           Semana:
