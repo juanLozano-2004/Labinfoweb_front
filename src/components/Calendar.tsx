@@ -9,15 +9,18 @@ interface Reservation {
   time: string; // Intervalo de tiempo en formato "7:00 AM - 8:30 AM"
   className: string;
   professorName: string;
+  laboratoryId: string;
+  user: string;
 }
 
 interface CalendarProps {
   reservations: Reservation[];
   startOfWeek: Date; // Fecha de inicio de la semana actual
   onCellClick: (day: string, time: string) => void;
+  onReservationClick: (reservation: Reservation) => void; // Función para manejar clics en reservas
 }
 
-export default function Calendar({ reservations, startOfWeek: initialStartOfWeek, onCellClick }: CalendarProps) {
+export default function Calendar({ reservations, startOfWeek: initialStartOfWeek, onCellClick,onReservationClick }: CalendarProps) {
   // Asegurarse de que la semana comience en Lunes
   const startOfWeekMonday = startOfWeek(initialStartOfWeek, { locale: es });
 
@@ -65,7 +68,11 @@ export default function Calendar({ reservations, startOfWeek: initialStartOfWeek
                   <td
                     key={`${format(day, "yyyy-MM-dd")}-${interval}`}
                     className={`calendar-cell ${reservation ? "reserved" : ""}`}
-                    onClick={() => onCellClick(format(day, "yyyy-MM-dd"), interval)}
+                    onClick={() =>
+                      reservation
+                        ? onReservationClick(reservation) // Llama a onReservationClick si hay una reserva
+                        : onCellClick(format(day, "yyyy-MM-dd"), interval) // Llama a onCellClick si no hay reserva
+                    }
                   >
                     {reservation ? (
                       <div className="reservation">

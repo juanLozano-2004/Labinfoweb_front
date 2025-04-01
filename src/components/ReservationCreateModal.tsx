@@ -22,7 +22,7 @@ interface ReservationModalProps {
   token: string; // Token de autenticación
 }
 
-export default function ReservationModal({
+export default function ReservationCreateModal({
   isOpen,
   onClose,
   onSave,

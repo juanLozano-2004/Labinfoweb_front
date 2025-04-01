@@ -4,9 +4,10 @@ import axios from "axios";
 import { API_BASE_URL } from "../services/globals";
 import { AuthContext } from "../context/AuthContext"; // Importa el contexto de autenticación
 import Calendar from "../components/Calendar"; // Asegúrate de que esta ruta sea correcta
-import ReservationModal from "../components/ReservationModal";
+import ReservationCreateModal from "../components/ReservationCreateModal";
 import { differenceInWeeks, addDays, format } from "date-fns"; // Importa funciones para manejar fechas
-import { es } from "date-fns/locale"; // Importa el locale español
+import ReservationEditModal from "../components/ReservationEditModal"; // Asegúrate de que esta ruta sea correcta
+
 
 interface Laboratory {
   idLabortatory: string;
@@ -16,10 +17,10 @@ interface Laboratory {
 
 interface Reservation {
   id?: string;
-  laboratoryId: string;
+  laboratoryId?: string;
   date: string; // Fecha en formato YYYY-MM-DD
   time: string; // Hora en formato HH:mm
-  user: string;
+  user?: string;
   className: string;
   professorName: string;
 }
@@ -33,6 +34,8 @@ export default function ReservationPage() {
   const [currentWeek, setCurrentWeek] = useState<number>(1);
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [isCreatingReservation, setIsCreatingReservation] = useState<boolean>(false);
+  const [isEditingReservation, setIsEditingReservation] = useState<boolean>(false); // Nuevo estado para el modal de edición
+  const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null); // Reserva seleccionada para editar
   const [selectedCell, setSelectedCell] = useState<{ day: string; time: string; endTime?: string } | null>(null);
   const [academicPeriod, setAcademicPeriod] = useState({
     startDate: "2025-01-15", // Fecha de inicio del periodo
@@ -131,6 +134,8 @@ export default function ReservationPage() {
             return {
               id: reservation.id,
               laboratoryName: reservation.laboratory.name,
+              laboratoryId: reservation.laboratory.idLabortatory,
+              user: reservation.user.username,
               date: format(startDate, "yyyy-MM-dd"), // Extraer solo la fecha en formato YYYY-MM-DD
               time: `${format(startDate, "h:mm a")} - ${format(endDate, "h:mm a")}`, // Formato de hora
               className: reservation.className,
@@ -159,10 +164,53 @@ export default function ReservationPage() {
       fetchReservations();
     }
   }, [selectedLaboratory, currentWeek, token]);
+
   const handleCreateReservation = (day: string, time: string) => {
     const [startTime, endTime] = time.split(" - "); // Divide el rango en hora de inicio y fin
     setSelectedCell({ day, time: startTime, endTime }); // Guarda tanto la hora de inicio como la hora de fin
     setIsCreatingReservation(true);
+  };
+
+  const handleEditReservation = (reservation: Reservation) => {
+    setSelectedReservation(reservation);
+    setIsEditingReservation(true);
+  };
+
+  const handleSaveEditedReservation = async (updatedReservation: Reservation) => {
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/api/v1/reservation/update`,
+        updatedReservation,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Reserva actualizada:", response.data);
+      setReservations((prev) =>
+        prev.map((res) => (res.id === updatedReservation.id ? updatedReservation : res))
+      );
+      setIsEditingReservation(false);
+    } catch (error) {
+      console.error("Error updating reservation:", error);
+    }
+  };
+
+  const handleDeleteReservation = async (id: string) => {
+    try {
+      await axios.delete(`${API_BASE_URL}/api/v1/reservation/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("Reserva eliminada:", id);
+      setReservations((prev) => prev.filter((res) => res.id !== id));
+      setIsEditingReservation(false);
+    } catch (error) {
+      console.error("Error deleting reservation:", error);
+    }
   };
 
   const handleSaveReservation = async (reservation: Reservation) => {
@@ -232,6 +280,8 @@ export default function ReservationPage() {
               return {
                 id: reservation.id,
                 laboratoryName: reservation.laboratory.name,
+                laboratoryId: reservation.laboratory.idLabortatory,
+                user: reservation.user.username,
                 date: format(startDate, "yyyy-MM-dd"), // Extraer solo la fecha en formato YYYY-MM-DD
                 time: `${format(startDate, "h:mm a")} - ${format(endDate, "h:mm a")}`, // Formato de hora
                 className: reservation.className,
@@ -332,9 +382,14 @@ export default function ReservationPage() {
 
       {/* Calendario */}
       <Calendar
-        reservations={reservations}
+        reservations={reservations.map((reservation) => ({
+          ...reservation,
+          laboratoryId: reservation.laboratoryId || "", // Ensure laboratoryId is always a string
+          user: reservation.user || "Unknown User", // Provide a default value for user
+        }))}
         startOfWeek={addDays(new Date(academicPeriod.startDate), (currentWeek - 1) * 7)}
         onCellClick={(day, time) => handleCreateReservation(day, time)}
+        onReservationClick={(reservation) => handleEditReservation(reservation)} // Cambia esto para usar la función de edición
       />
 
       {/* Botón de Exportar a Excel */}
@@ -343,7 +398,7 @@ export default function ReservationPage() {
       </div>
 
       {/* Modal para Crear Reservas */}
-      <ReservationModal
+      <ReservationCreateModal
         isOpen={isCreatingReservation}
         onClose={() => setIsCreatingReservation(false)}
         onSave={(reservation) =>
@@ -362,6 +417,22 @@ export default function ReservationPage() {
 
         token={token || ""}
       />
+
+      {/* Modal para Editar Reservas */}
+      {selectedReservation && (
+        <ReservationEditModal
+          isOpen={isEditingReservation}
+          onClose={() => setIsEditingReservation(false)}
+          reservation={{
+            ...selectedReservation,
+            id: selectedReservation?.id || "",
+            laboratoryId: selectedReservation?.laboratoryId || "", // Asegúrate de que laboratoryId sea un string
+            user: selectedReservation?.user || "defaultUser", // Provide a default value for user
+          }}
+          onSave={handleSaveEditedReservation}
+          onDelete={handleDeleteReservation}
+        />
+      )}
     </div>
   );
 }
