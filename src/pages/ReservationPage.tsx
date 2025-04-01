@@ -204,7 +204,9 @@ export default function ReservationPage() {
         }
       );
   
-      // Llamar a fetchReservations para actualizar las reservas
+      console.log("Reserva creada:", response.data);
+  
+      // Llamar a fetchReservations para sincronizar las reservas
       if (selectedLaboratory) {
         const fetchReservations = async () => {
           try {
@@ -264,7 +266,6 @@ export default function ReservationPage() {
       }
     }
   };
-  
   const handleExportToExcel = async () => {
     try {
       const response = await axios.get(
@@ -288,9 +289,6 @@ export default function ReservationPage() {
     }
   };
 
-  const handleWeekNavigation = (direction: "prev" | "next") => {
-    setCurrentWeek((prev) => (direction === "prev" ? prev - 1 : prev + 1));
-  };
 
   return (
     <div className="reservation-page">
@@ -361,7 +359,7 @@ export default function ReservationPage() {
         endTime={selectedCell?.endTime || ""}
         currentUser={currentUser || ""}
         selectedLaboratory={selectedLaboratory || ""}
-        onLaboratoryChange={(labId) => setSelectedLaboratory(labId)}
+
         token={token || ""}
       />
     </div>
