@@ -1,21 +1,28 @@
 import React from "react";
 import "../styles/Calendar.css";
+import { format, addDays, startOfWeek } from "date-fns";
+import { es } from "date-fns/locale";
 
 interface Reservation {
   id?: string;
   date: string; // Fecha en formato YYYY-MM-DD
-  time: string; // Hora en formato HH:mm
+  time: string; // Intervalo de tiempo en formato "7:00 AM - 8:30 AM"
   className: string;
   professorName: string;
 }
 
 interface CalendarProps {
   reservations: Reservation[];
+  startOfWeek: Date; // Fecha de inicio de la semana actual
   onCellClick: (day: string, time: string) => void;
 }
 
-export default function Calendar({ reservations, onCellClick }: CalendarProps) {
-  const days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+export default function Calendar({ reservations, startOfWeek: initialStartOfWeek, onCellClick }: CalendarProps) {
+  // Asegurarse de que la semana comience en Lunes
+  const startOfWeekMonday = startOfWeek(initialStartOfWeek, { locale: es });
+
+  // Calcular las fechas de la semana actual (Lunes a Sábado)
+  const weekDays = Array.from({ length: 6 }, (_, i) => addDays(startOfWeekMonday, i));
   const intervals = [
     "7:00 AM - 8:30 AM",
     "8:30 AM - 10:00 AM",
@@ -27,14 +34,20 @@ export default function Calendar({ reservations, onCellClick }: CalendarProps) {
     "5:30 PM - 7:00 PM",
   ];
 
+  // Capitalizar la primera letra de los días
+  const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
+
   return (
     <div className="calendar">
       <table>
         <thead>
           <tr>
             <th>Hora</th>
-            {days.map((day) => (
-              <th key={day}>{day}</th>
+            {weekDays.map((day, index) => (
+              <th key={index}>
+                {capitalize(format(day, "EEEE", { locale: es }))} <br />
+                {format(day, "dd/MM/yyyy")}
+              </th>
             ))}
           </tr>
         </thead>
@@ -42,17 +55,17 @@ export default function Calendar({ reservations, onCellClick }: CalendarProps) {
           {intervals.map((interval) => (
             <tr key={interval}>
               <td>{interval}</td>
-              {days.map((day) => {
-                // Buscar la reserva correspondiente al día y hora
+              {weekDays.map((day) => {
                 const reservation = reservations.find(
-                  (res) => res.date === day && res.time === interval
+                  (res) =>
+                    res.date === format(day, "yyyy-MM-dd") && res.time === interval
                 );
 
                 return (
                   <td
-                    key={`${day}-${interval}`}
+                    key={`${format(day, "yyyy-MM-dd")}-${interval}`}
                     className={`calendar-cell ${reservation ? "reserved" : ""}`}
-                    onClick={() => onCellClick(day, interval)}
+                    onClick={() => onCellClick(format(day, "yyyy-MM-dd"), interval)}
                   >
                     {reservation ? (
                       <div className="reservation">

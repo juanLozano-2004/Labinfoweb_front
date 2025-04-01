@@ -22,14 +22,21 @@
 .calendar-cell {
   cursor: pointer;
   background-color: #fff;
-}
-
-.calendar-cell:hover {
-  background-color: #f0f0f0;
+  height: 80px;
+  vertical-align: top;
 }
 
 .calendar-cell.reserved {
-  background-color: #d4edda;
-  color: #155724;
-  font-weight: bold;
+  background-color: #d4edda; /* Verde claro */
+  border: 2px solid #28a745; /* Borde verde */
+}
+
+.reservation {
+  color: #155724; /* Verde oscuro */
+  font-size: 0.9em;
+  text-align: left;
+  padding: 5px;
+  border-radius: 4px;
+  background-color: #e9f7ef; /* Fondo más claro para el texto */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }

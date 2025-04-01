@@ -167,14 +167,13 @@ export default function ReservationPage() {
 
   const handleSaveReservation = async (reservation: Reservation) => {
     try {
-      // Calcula la fecha real basada en el día seleccionado
-      const day = selectedCell?.day || ""; // Nombre del día (por ejemplo, "Miércoles")
-      const date = getDateFromDay(day, currentWeek, academicPeriod.startDate); // Fecha en formato YYYY-MM-DD
-
+      // Usar directamente la fecha seleccionada
+      const date = selectedCell?.day || ""; // Fecha en formato YYYY-MM-DD
+  
       // Convierte las horas al formato de 24 horas
       const startTime = `${date}T${convertTo24HourFormat(selectedCell?.time || "00:00")}`;
       const endTime = `${date}T${convertTo24HourFormat(selectedCell?.endTime || "00:00")}`;
-
+  
       const payload = {
         laboratory: {
           idLabortatory: reservation.laboratoryId,
@@ -191,9 +190,9 @@ export default function ReservationPage() {
         className: reservation.className,
         professorName: reservation.professorName,
       };
-
+  
       console.log("Datos enviados al backend:", payload);
-
+  
       const response = await axios.post(
         `${API_BASE_URL}/api/v1/reservation/create`,
         payload,
@@ -204,7 +203,57 @@ export default function ReservationPage() {
           },
         }
       );
-      setReservations((prev) => [...prev, response.data]);
+  
+      // Llamar a fetchReservations para actualizar las reservas
+      if (selectedLaboratory) {
+        const fetchReservations = async () => {
+          try {
+            const response = await axios.get(
+              `${API_BASE_URL}/api/v1/reservation/getByLaboratory/${selectedLaboratory}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+  
+            console.log("Reservas actualizadas:", response.data);
+  
+            // Transformar y filtrar las reservas
+            const startOfWeek = addDays(new Date(academicPeriod.startDate), (currentWeek - 1) * 7);
+            const endOfWeek = addDays(startOfWeek, 6);
+  
+            const transformedReservations = response.data.map((reservation: any) => {
+              const startDate = new Date(reservation.startTime);
+              const endDate = new Date(reservation.endTime);
+  
+              return {
+                id: reservation.id,
+                laboratoryName: reservation.laboratory.name,
+                date: format(startDate, "yyyy-MM-dd"), // Extraer solo la fecha en formato YYYY-MM-DD
+                time: `${format(startDate, "h:mm a")} - ${format(endDate, "h:mm a")}`, // Formato de hora
+                className: reservation.className,
+                professorName: reservation.professorName,
+              };
+            });
+  
+            const filteredReservations = transformedReservations.filter((reservation: any) => {
+              const reservationDate = reservation.date;
+              const startDate = format(startOfWeek, "yyyy-MM-dd");
+              const endDate = format(endOfWeek, "yyyy-MM-dd");
+  
+              return reservationDate >= startDate && reservationDate <= endDate;
+            });
+  
+            setReservations(filteredReservations);
+          } catch (error) {
+            console.error("Error fetching reservations:", error);
+          }
+        };
+  
+        await fetchReservations(); // Actualizar las reservas
+      }
+  
       setIsCreatingReservation(false);
       setSelectedCell(null);
     } catch (error) {
@@ -215,7 +264,7 @@ export default function ReservationPage() {
       }
     }
   };
-
+  
   const handleExportToExcel = async () => {
     try {
       const response = await axios.get(
@@ -286,6 +335,7 @@ export default function ReservationPage() {
       {/* Calendario */}
       <Calendar
         reservations={reservations}
+        startOfWeek={addDays(new Date(academicPeriod.startDate), (currentWeek - 1) * 7)}
         onCellClick={(day, time) => handleCreateReservation(day, time)}
       />
 
