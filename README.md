@@ -1,84 +1,93 @@
-# Getting Started with Create React App
+# 🚀 **LabInfoWeb - Frontend**  
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Bienvenido al repositorio del **Frontend de LabInfoWeb**, una plataforma diseñada para administrar de una forma sencilla y eficaz los laboratorios del area de sistemas.
+Este sistema permite a los usuarios crear, modificar y eliminar reservas en los diferentes laboratorios los cuales ofrecen las instalaciones.  
 
-## Available Scripts
+📌 **Estado del Proyecto:** Copmpletado 
+📆 **Última actualización:** 02/04/2025
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 📌 **Tabla de Contenidos**  
 
-Runs the app in the development mode.\
-<<<<<<< HEAD
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- [✨ Descripción del Proyecto](#Creación de una app)  
+- [🎯 Objetivos](#objetivos)  
+- [🖥️ Tecnologías Utilizadas](#tecnologías-utilizadas)  
+- [📖 Descripción Técnica del Proyecto](#descripción-técnica-del-proyecto)  
+- [⚙️ Configuración del Entorno de Desarrollo](#configuración-del-entorno-de-desarrollo)  
+- [🔐 Seguridad](#seguridad)  
+- [🔗 Integraciones](#integraciones)  
+- [🛠️ Instalación y Uso](#instalación-y-uso)  
+- [📂 Estructura del Proyecto](#estructura-del-proyecto)  
+- [📸 Capturas de Pantalla](#capturas-de-pantalla)  
+- [📈 Estado del Proyecto y Mejoras Futuras](#estado-del-proyecto-y-mejoras-futuras)  
+- [🤝 Contribuciones](#contribuciones)  
+- [📄 Licencia](#licencia)  
+- [📞 Contacto](#contacto)  
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## ✨ **Descripción del Proyecto**  
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+[Nombre del Proyecto] es una aplicación desarrollada con **React.js** que permite a los usuarios [descripción general de la funcionalidad].  
 
-### `npm run build`
+Principales características:  
+✅ Registro e inicio de sesión con autenticación segura.  
+✅ Interfaz intuitiva con navegación dinámica.  
+✅ Optimización para dispositivos móviles y de escritorio.  
+✅ [Otra funcionalidad importante].  
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🎯 **Objetivos**  
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Facilitar [objetivo principal del sistema].  
+- Mejorar la experiencia de usuario mediante un diseño intuitivo y rápido.  
+- Integrar servicios de terceros para ampliar funcionalidades.  
 
-### `npm run eject`
+---
 
-<<<<<<< HEAD
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🖥️ **Tecnologías Utilizadas**  
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+| Tecnología | Uso |
+|------------|------------------------------|
+| **React.js** | Framework principal |
+| **Tailwind CSS / Bootstrap** | Estilos y UI |
+| **React Router** | Manejo de rutas |
+| **Axios** | Comunicación con APIs |
+| **Redux / Zustand** | Gestión de estado |
+| **Vite / Webpack** | Construcción y optimización |
+| **Firebase / Auth0** | Autenticación y base de datos |
+| **PostgreSQL / MongoDB** | Base de datos en backend |
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-=======
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## 📖 **Descripción Técnica del Proyecto**  
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+El frontend de **[Nombre del Proyecto]** está basado en una arquitectura **SPA (Single Page Application)** con las siguientes características:  
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### 🚀 **Arquitectura del Frontend**  
+- **Componentes reutilizables** siguiendo el principio **DRY (Don't Repeat Yourself)**.  
+- **Lazy Loading y Code Splitting** para mejorar el rendimiento.  
+- **Manejo de estado global** con **Redux / Zustand / Context API**.  
+- **Renderizado optimizado** con memoización de componentes.  
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
->>>>>>> feature/login
+### 🔗 **Comunicación con el Backend**  
+- Conexión a una **REST API** con endpoints protegidos.  
+- Envío seguro de datos mediante **JWT** y **OAuth**.  
+- Mecanismo de **reintentos automáticos** en caso de fallos de conexión.  
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## ⚙️ **Configuración del Entorno de Desarrollo**  
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-<<<<<<< HEAD
+### 📌 **Requisitos Previos**  
+Asegúrate de tener instalados:  
+- [Node.js](https://nodejs.org/) (versión recomendada: 16+)  
+- [Git](https://git-scm.com/)  
+- [npm](https://www.npmjs.com/) o [yarn](https://yarnpkg.com/)  
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-=======
->>>>>>> feature/login
+### 🚀 **Clonar el Repositorio**  
+```bash
+git clone https://github.com/usuario/nombre-del-repositorio.git
+cd nombre-del-repositorio

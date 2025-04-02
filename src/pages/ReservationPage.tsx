@@ -165,7 +165,7 @@ export default function ReservationPage() {
   
       fetchReservations();
     }
-  }, [currentWeek, token]);
+  },[currentWeek, token]);
 
     useEffect(() => {
     async function fetchUser() {
