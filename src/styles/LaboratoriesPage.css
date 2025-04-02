@@ -1,0 +1,102 @@
+.laboratory-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra horizontalmente el contenido */
+  margin: 0 auto; /* Centra horizontalmente */
+  padding: 20px; /* Espaciado interno */
+  width: 100%; /* Asegura que ocupe todo el ancho disponible */
+  max-width: 1200px; /* Limita el ancho máximo */
+  box-sizing: border-box; /* Incluye el padding en el ancho total */
+  transition: width 0.3s ease; /* Transición suave al ajustar el ancho */
+}
+
+.laboratory-row {
+  display: flex;
+  justify-content: space-between; /* Espacia el contenido entre info y botones */
+  align-items: center; /* Centra verticalmente el contenido */
+  width: 100%; /* Asegura que las filas ocupen todo el ancho disponible */
+  padding: 15px 20px; /* Espaciado interno */
+  border: 1px solid #227c0e;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  margin-bottom: 15px; /* Espaciado entre filas */
+  box-sizing: border-box; /* Asegura que el padding no desborde */
+  transition: width 0.3s ease; /* Transición suave al ajustar el ancho */
+}
+
+/* Alterna los colores de fondo entre blanco y verde pastel */
+.laboratory-row:nth-child(odd) {
+  background-color: white; /* Blanco suave (hueso) */
+}
+
+.laboratory-row:nth-child(even) {
+  background-color: white; /* Verde pastel */
+}
+
+.laboratory-row .info {
+  display: flex;
+  gap: 0; /* Elimina el espaciado entre los elementos para usar separadores */
+  flex-wrap: nowrap; /* Evita que los elementos se ajusten a la siguiente línea */
+  align-items: center; /* Centra verticalmente los elementos */
+  flex-grow: 1; /* Permite que la información ocupe el espacio disponible */
+}
+
+/* Estilo para cada celda de información */
+.laboratory-row .info p {
+  margin: 0;
+  padding: 0 15px; /* Espaciado interno horizontal */
+  font-size: 16px;
+  color: #333;
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  position: relative; /* Para posicionar el separador */
+}
+
+/* Añade un separador vertical "|" después de cada celda excepto la última */
+.laboratory-row .info p:not(:last-child)::after {
+  content: "|";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999; /* Color del separador */
+}
+
+.laboratory-row .actions {
+  display: flex;
+  gap: 10px; /* Espaciado entre los botones */
+  margin-left: 20px; /* Espacio entre la información y los botones */
+}
+
+.laboratory-row button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  color: white;
+}
+
+.laboratory-row .edit-button {
+  background-color: #007bff; /* Azul para editar */
+}
+
+.laboratory-row .delete-button {
+  background-color: #dc3545; /* Rojo para borrar */
+}
+
+.laboratory-row button:hover {
+  opacity: 0.9; /* Efecto hover */
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Ajuste dinámico cuando la barra de menú está oculta */
+.admin-view .side-menu-bar.hidden + .content-area .laboratory-list {
+  width: 100%; /* Ocupa todo el ancho disponible */
+  transition: width 0.3s ease; /* Transición suave */
+}

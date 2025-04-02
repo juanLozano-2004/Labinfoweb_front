@@ -1,0 +1,87 @@
+.home-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #e0f7e9; /* Verde pastel */
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.home-title {
+  font-size: 32px;
+  margin-top: 0;
+  font-weight: bold;
+  color: white; /* Verde oscuro */
+  background-color: #2e7d32; /* Fondo verde oscuro */
+  padding: 10px 20px; /* Espaciado interno */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
+  text-align: center;
+}
+.loading-text {
+  font-size: 18px;
+  color: #555;
+}
+
+.viewer {
+  flex: 1; /* Hace que ocupe todo el espacio disponible */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch; /* Asegura que los elementos hijos se estiren */
+  justify-content: flex-start; /* Alinea los elementos al inicio */
+  width: 100%;;
+
+}
+
+.content-area {
+  flex: 1; /* Ocupa el resto del espacio disponible */
+  display: flex; /* Activa flexbox */
+  flex-direction: column; /* Asegura que los elementos internos se apilen verticalmente */
+  justify-content: flex-start; /* Alinea el contenido al inicio */  
+  align-items: center; /* Centra horizontalmente */
+  padding: 20px; /* Espaciado interno */
+  padding-left: 0;
+  padding-right: 275px;
+  box-sizing: border-box; /* Incluye el padding en el ancho total */
+  transition: margin-left 0.3s ease; /* Animación para ajustar el contenido */
+  text-align: center; /* Centra el texto dentro del contenido */
+}
+
+.admin-view .side-menu-bar.hidden + .content-area {
+  margin-left: 0; /* Ajusta el contenido cuando la barra lateral está oculta */
+}
+
+.toggle-button {
+  position: fixed; /* Fija el botón en la pantalla */
+  top: 10px;
+  left: 10px; /* Posición fuera del menú lateral */
+  background-color: #4caf50; /* Verde */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  cursor: pointer;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Asegura que el botón esté por encima del contenido */
+  transition: background-color 0.3s ease;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(46, 125, 50, 0.1); /* Verde oscuro con transparencia */
+}
+
+.circle-1 {
+  width: 300px;
+  height: 300px;
+  top: -50px;
+  left: -50px;
+}
+
+.circle-2 {
+  width: 200px;
+  height: 200px;
+  bottom: -50px;
+  right: -50px;
+}
