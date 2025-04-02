@@ -10,7 +10,6 @@ interface SideMenuBarProps {
 }
 
 export function SideMenuBarAdmin({ isVisible, toggleMenu ,changeView }: SideMenuBarProps) {
-  const navigate = useNavigate();
   const authContext = useContext(AuthContext);
 
 

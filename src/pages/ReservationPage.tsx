@@ -47,7 +47,7 @@ export default function ReservationPage() {
   const [isEditingReservation, setIsEditingReservation] = useState<boolean>(false); // Nuevo estado para el modal de edición
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null); // Reserva seleccionada para editar
   const [selectedCell, setSelectedCell] = useState<{ day: string; time: string; endTime?: string } | null>(null);
-  const [academicPeriod, setAcademicPeriod] = useState({
+  const [academicPeriod] = useState({
     startDate: "2025-01-15", // Fecha de inicio del periodo
     endDate: "2025-05-15",   // Fecha de fin del periodo
   });
@@ -68,22 +68,6 @@ export default function ReservationPage() {
 
   const weeks = calculateWeeks(academicPeriod.startDate, academicPeriod.endDate);
 
-  const getDateFromDay = (dayName: string, currentWeek: number, academicPeriodStart: string): string => {
-    const daysOfWeek = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-    const dayIndex = daysOfWeek.indexOf(dayName);
-
-    if (dayIndex === -1) {
-      throw new Error(`Día inválido: ${dayName}`);
-    }
-
-    // Calcula el inicio de la semana actual
-    const startOfAcademicPeriod = new Date(academicPeriodStart);
-    const startOfCurrentWeek = addDays(startOfAcademicPeriod, (currentWeek - 1) * 7);
-
-    // Calcula la fecha del día seleccionado
-    const selectedDate = addDays(startOfCurrentWeek, dayIndex);
-    return format(selectedDate, "yyyy-MM-dd"); // Devuelve la fecha en formato YYYY-MM-DD
-  };
 
   const convertTo24HourFormat = (time: string): string => {
     const [hour, minutePart] = time.split(":");
@@ -181,7 +165,7 @@ export default function ReservationPage() {
   
       fetchReservations();
     }
-  }, [selectedLaboratory, currentWeek, token]);
+  }, [currentWeek, token]);
 
     useEffect(() => {
     async function fetchUser() {
@@ -396,28 +380,7 @@ export default function ReservationPage() {
       }
     }
   };
-  const handleExportToExcel = async () => {
-    try {
-      const response = await axios.get(
-        `${API_BASE_URL}/api/v1/reservation/export?laboratoryId=${selectedLaboratory}&week=${currentWeek}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          responseType: "blob",
-        }
-      );
 
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `reservas-semana-${currentWeek}.xlsx`);
-      document.body.appendChild(link);
-      link.click();
-    } catch (error) {
-      console.error("Error exporting reservations to Excel:", error);
-    }
-  };
 
 
   return (
