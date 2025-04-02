@@ -1,17 +1,23 @@
 .calendar {
   margin-top: 20px;
+  width: 100%; /* Ocupa todo el ancho disponible */
+  margin: 0 auto; /* Centra el calendario horizontalmente */
+  border-radius: 10px; /* Bordes redondeados */
+  overflow: hidden; /* Asegura que los bordes redondeados se apliquen correctamente */
 }
 
 .calendar table {
   width: 100%;
   border-collapse: collapse;
+  height: auto; /* Ajusta la altura automáticamente */
 }
 
 .calendar th,
 .calendar td {
   border: 1px solid #ccc;
   text-align: center;
-  padding: 10px;
+  padding: 5px; /* Reduce el padding para disminuir la altura */
+  border-radius: 5px; /* Bordes redondeados para las celdas */
 }
 
 .calendar th {
@@ -22,8 +28,9 @@
 .calendar-cell {
   cursor: pointer;
   background-color: #fff;
-  height: 80px;
+  height: 50px; /* Reduce la altura de las celdas */
   vertical-align: top;
+  border-radius: 5px; /* Bordes redondeados para las celdas */
 }
 
 .calendar-cell.reserved {

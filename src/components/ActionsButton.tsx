@@ -45,15 +45,6 @@ export default function ActionsButton({ onAdd, onExportExcel, addLabel }: Action
           >
             ➕ {addLabel}
           </button>
-          <button 
-            className="dropdown-item"
-            onClick={() => {
-              if (onExportExcel) onExportExcel();
-              setIsMenuOpen(false);
-            }}
-          >
-            📊 Exportar como Excel
-          </button>
         </div>
       )}
     </div>

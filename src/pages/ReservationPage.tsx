@@ -472,11 +472,6 @@ export default function ReservationPage() {
         onReservationClick={(reservation) => handleEditReservation(reservation)} // Cambia esto para usar la función de edición
       />
 
-      {/* Botón de Exportar a Excel */}
-      <div className="export-button">
-        <button onClick={handleExportToExcel}>Exportar a Excel</button>
-      </div>
-
       {/* Modal para Crear Reservas */}
       <ReservationCreateModal
         isOpen={isCreatingReservation}
