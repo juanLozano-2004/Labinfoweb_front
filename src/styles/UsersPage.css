@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center; /* Centra horizontalmente el contenido */
   margin: 0 auto; /* Centra horizontalmente */
-  padding: 20px; /* Espaciado interno */
+  padding: 21px; /* Espaciado interno */
   width: 100%; /* Asegura que ocupe todo el ancho disponible */
   max-width: 1200px; /* Limita el ancho máximo */
   box-sizing: border-box; /* Incluye el padding en el ancho total */
