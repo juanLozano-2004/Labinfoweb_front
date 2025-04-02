@@ -1,0 +1,132 @@
+.reservation-page {
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.laboratory-selector {
+  display: flex;
+  justify-content: center; /* Centra el selector de laboratorios */
+  margin-bottom: 20px;
+}
+
+.laboratory-selector label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.laboratory-selector select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.week-navigation {
+  display: flex;
+  justify-content: left; /* Alinea el selector de semanas a la izquierda */
+  margin-left: 50px; /* Aumenta la separación del selector de laboratorios */
+  margin-bottom: 20px;
+}
+
+.week-navigation label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.week-navigation select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.week-navigation button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.week-navigation button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.weekly-calendar table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.weekly-calendar th,
+.weekly-calendar td {
+  border: 1px solid #ccc;
+  text-align: center;
+  padding: 10px;
+}
+
+.calendar-cell {
+  cursor: pointer;
+}
+
+.calendar-cell:hover {
+  background-color: #f0f0f0;
+}
+
+.export-button {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.reservation-form {
+  background: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.weekly-calendar {
+    margin-top: 20px;
+  }
+  
+  .weekly-calendar table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .weekly-calendar th,
+  .weekly-calendar td {
+    border: 1px solid #ccc;
+    text-align: center;
+    padding: 10px;
+  }
+  
+  .weekly-calendar th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+  
+  .calendar-cell {
+    cursor: pointer;
+    background-color: #fff;
+  }
+  
+  .calendar-cell:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .calendar-cell.reserved {
+    background-color: #d4edda;
+    color: #155724;
+    font-weight: bold;
+  }

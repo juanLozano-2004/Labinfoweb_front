@@ -21,6 +21,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+<<<<<<< HEAD
 
 
 #----------
@@ -80,3 +81,5 @@ storybook-static/
 
 # Archivos de reporte de errores
 report.[0-9]*
+=======
+>>>>>>> feature/login

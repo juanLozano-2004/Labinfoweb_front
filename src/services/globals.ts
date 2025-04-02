@@ -1,0 +1,1 @@
+export const API_BASE_URL = "https://reservback-fad6dbdhdkfmcjfe.canadacentral-01.azurewebsites.net";
